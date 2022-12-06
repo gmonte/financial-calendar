@@ -1,0 +1,3 @@
+#!/bin/sh
+docker build -t react-web-basic-production --build-arg mode=production ../
+docker rm -f react-web-basic-production || true && docker run --restart always --name react-web-basic-production -p 80:80/tcp -dit react-web-basic-production
