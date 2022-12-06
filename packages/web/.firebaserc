@@ -1,15 +1,15 @@
 {
   "projects": {
-    "default": "financial-calendar-gmonte"
+    "default": "financial-calendar-2805"
   },
   "targets": {
-    "financial-calendar-gmonte": {
+    "financial-calendar-2805": {
       "hosting": {
         "storybook": [
-          "storybook-financial-calendar"
+          "storybook-agendafinanceira"
         ],
         "app": [
-          "financial-calendar"
+          "agendafinanceira"
         ]
       }
     }
