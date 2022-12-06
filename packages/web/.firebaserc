@@ -9,7 +9,7 @@
           "storybook-financial-calendar"
         ],
         "app": [
-          "financial-calendar-gmonte"
+          "financial-calendar"
         ]
       }
     }
