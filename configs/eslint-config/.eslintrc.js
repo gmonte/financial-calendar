@@ -20,12 +20,16 @@ module.exports = {
     'import'
   ],
   rules: {
+    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/consistent-type-assertions': [
+      'warn',
+      { assertionStyle: 'as', objectLiteralTypeAssertions: 'allow' }
+    ],
+    '@typescript-eslint/no-misused-promises': 'off',
+    '@typescript-eslint/no-floating-promises': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'warn',
-    '@typescript-eslint/consistent-type-assertions': ['error', {
-      assertionStyle: 'as',
-      objectLiteralTypeAssertions: 'allow-as-parameter'
-    }],
     'generator-star-spacing': ['error', {
       before: false,
       after: true

@@ -1,19 +1,8 @@
-import {
-  Outlet,
-  Link
-} from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 export function GuestLayout () {
   return (
-    <div>
-      guest layout {' > '}
-
-      <Link to="/">Sign in</Link>
-      {' | '}
-      <Link to="/sign-up">Sign up</Link>
-
-      <br />
-
+    <div className="w-screen h-screen bg-gray-900 flex flex-col">
       <Outlet />
     </div>
   )

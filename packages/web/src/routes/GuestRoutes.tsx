@@ -17,23 +17,24 @@ const SignUp = lazy(async () => await import('~/modules/auth/pages/SignUp'))
 export function GuestRoutes () {
   return (
     <Routes>
-      <Route path="/" element={ <GuestLayout /> }>
 
-        <Route index element={ (
+      <Route path="/auth" element={ <GuestLayout /> }>
+        <Route index element={ <Navigate to="/auth/sign-in" replace /> } />
+
+        <Route path="/auth/sign-in" element={ (
           <Suspense fallback={ <Loader /> }>
             <SignIn />
           </Suspense>
         ) } />
 
-        <Route path="/sign-up" element={ (
+        <Route path="/auth/sign-up" element={ (
           <Suspense fallback={ <Loader /> }>
             <SignUp />
           </Suspense>
         ) } />
-
       </Route>
 
-      <Route path="*" element={ <Navigate to="/" replace /> } />
+      <Route path="*" element={ <Navigate to="/auth" replace /> } />
     </Routes>
   )
 }

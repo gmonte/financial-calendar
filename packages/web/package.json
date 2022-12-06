@@ -6,15 +6,20 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint ./src --ext .ts,.tsx",
     "test": "vitest",
-    "prepare": "husky install && yarn permissions"
+    "lint": "eslint ./src --ext .ts,.tsx",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.0.1",
+    "@radix-ui/react-slot": "^1.0.1",
     "@reduxjs/toolkit": "^1.8.5",
     "axios": "^0.26.1",
+    "clsx": "^1.2.1",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
+    "phosphor-react": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.2",
@@ -23,11 +28,20 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.2.1",
-    "styled-components": "^5.3.5",
     "swr": "^1.3.0",
-    "typed-redux-saga": "^1.5.0"
+    "typed-redux-saga": "^1.5.0",
+    "vite-plugin-fonts": "^0.6.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@storybook/addon-actions": "^6.5.14",
+    "@storybook/addon-essentials": "^6.5.14",
+    "@storybook/addon-interactions": "^6.5.14",
+    "@storybook/addon-links": "^6.5.14",
+    "@storybook/addon-postcss": "^2.0.0",
+    "@storybook/builder-vite": "^0.2.5",
+    "@storybook/react": "^6.5.14",
+    "@storybook/testing-library": "^0.0.13",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.4.3",
@@ -36,12 +50,15 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/redux-logger": "^3.0.9",
-    "@types/styled-components": "^5.1.26",
-    "@vitejs/plugin-react": "^2.0.1",
-    "jest-styled-components": "^7.1.0",
+    "autoprefixer": "^10.4.13",
+    "babel-loader": "^8.3.0",
     "jsdom": "^20.0.0",
+    "postcss": "^8.4.19",
+    "tailwindcss": "^3.2.4",
     "typescript": "^4.6.4",
-    "vite": "^3.0.7",
-    "vitest": "^0.22.1"
+    "vite": "^3.0.7"
+  },
+  "resolutions": {
+    "postcss": "^8.4.19"
   }
 }

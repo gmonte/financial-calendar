@@ -1,3 +1,0 @@
-#!/bin/sh
-docker build -t react-web-basic-development --build-arg mode=development ../
-docker rm -f react-web-basic-development || true && docker run --restart always --name react-web-basic-development -p 3000:80/tcp -dit react-web-basic-development
