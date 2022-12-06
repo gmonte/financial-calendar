@@ -1,7 +1,6 @@
 import {
   FormEventHandler,
   useCallback,
-  useEffect,
   useRef,
   useState
 } from 'react'
@@ -49,13 +48,6 @@ export default function SignIn () {
       dispatch(AuthActions.loginPopup({ providerId }))
     },
     [dispatch]
-  )
-
-  useEffect(
-    () => {
-      console.log('VITE_FIREBASE_PROJECT_ID', import.meta.env.VITE_FIREBASE_PROJECT_ID)
-    },
-    []
   )
 
   return (
