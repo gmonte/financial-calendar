@@ -3,12 +3,14 @@ import { createSlice } from '@reduxjs/toolkit'
 import {
   State,
   LoginPayload,
+  LoginPopupPayload,
   LoginSuccessPayload
 } from './types'
 
 const initialState: State = {
   authenticated: false,
-  accessToken: undefined
+  user: undefined,
+  provider: undefined
 }
 
 export const slice = createSlice({
@@ -16,13 +18,13 @@ export const slice = createSlice({
   initialState,
   reducers: {
     login (_state, _action: LoginPayload) {},
+    loginPopup (_state, _action: LoginPopupPayload) {},
     loginSuccess (state, action: LoginSuccessPayload) {
       state.authenticated = true
-      state.accessToken = action.payload.accessToken
+      state.user = action.payload.user
     },
     logout (state) {
       state.authenticated = false
-      state.accessToken = undefined
     }
   }
 })

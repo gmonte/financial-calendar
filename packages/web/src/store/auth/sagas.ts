@@ -1,26 +1,65 @@
-import md5 from 'md5'
+import {
+  getAuth,
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut
+} from 'firebase/auth'
 import { takeLatest } from 'redux-saga/effects'
 import {
   call,
   put
 } from 'typed-redux-saga'
 
-import { authenticationService } from '~/services/api/authentication.service'
+import { app } from '~/services/firebase'
 
 import { AuthActions } from '.'
 import { LoaderActions } from '../loader'
-import { LoginPayload } from './types'
+import { LoginPopupPayload } from './types'
 
-function* login ({ payload }: LoginPayload) {
+// function* login ({ payload }: LoginPayload) {
+//   try {
+//     yield put(LoaderActions.start())
+
+//     const { data } = yield * call(authenticationService.login, {
+//       username: payload.username,
+//       password: md5(payload.password)
+//     })
+
+//     yield put(AuthActions.loginSuccess({ accessToken: `Bearer ${ data.accessToken }` }))
+//   } catch (err) {
+//     console.error(err)
+//   } finally {
+//     yield put(LoaderActions.stop())
+//   }
+// }
+
+function* loginPopup ({ payload: { providerId } }: LoginPopupPayload) {
   try {
     yield put(LoaderActions.start())
 
-    const { data } = yield * call(authenticationService.login, {
-      username: payload.username,
-      password: md5(payload.password)
-    })
+    let provider
+    const auth = getAuth(app)
 
-    yield put(AuthActions.loginSuccess({ accessToken: `Bearer ${ data.accessToken }` }))
+    switch (providerId) {
+      case 'github': {
+        provider = new GithubAuthProvider()
+        break
+      }
+      case 'google': {
+        provider = new GoogleAuthProvider()
+        break
+      }
+      default: break
+    }
+
+    if (provider) {
+      const { user } = yield * call(signInWithPopup, auth, provider)
+
+      if (user) {
+        yield put(AuthActions.loginSuccess({ user }))
+      }
+    }
   } catch (err) {
     console.error(err)
   } finally {
@@ -28,6 +67,12 @@ function* login ({ payload }: LoginPayload) {
   }
 }
 
+function* logout () {
+  const auth = getAuth(app)
+  yield call(signOut, auth)
+}
+
 export default [
-  takeLatest(AuthActions.login.type, login)
+  takeLatest(AuthActions.loginPopup.type, loginPopup),
+  takeLatest(AuthActions.logout.type, logout)
 ]

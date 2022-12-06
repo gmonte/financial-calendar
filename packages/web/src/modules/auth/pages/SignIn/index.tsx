@@ -21,8 +21,12 @@ import { Divider } from '~/components/Divider'
 import { Heading } from '~/components/Heading'
 import { Text } from '~/components/Text'
 import { TextInput } from '~/components/TextInput'
+import { useAppDispatch } from '~/store'
+import { AuthActions } from '~/store/auth'
 
 export default function SignIn () {
+  const dispatch = useAppDispatch()
+
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
 
@@ -41,9 +45,9 @@ export default function SignIn () {
 
   const handleSignIn = useCallback(
     (providerId: string) => {
-      console.log('login', providerId)
+      dispatch(AuthActions.loginPopup({ providerId }))
     },
-    []
+    [dispatch]
   )
 
   return (
@@ -112,7 +116,7 @@ export default function SignIn () {
         <Button
           startIcon={ <GoogleLogo size={ 24 } color="red" /> }
           className="mt-2 w-full bg-white hover:bg-gray-100 active:bg-gray-200"
-          onClick={ () => handleSignIn('google') }
+          onClick={ async () => handleSignIn('google') }
         >
           Acessar com Google
         </Button>
@@ -127,7 +131,7 @@ export default function SignIn () {
         <Button
           startIcon={ <GithubLogo size={ 24 } color="white" /> }
           className="mt-3 w-full bg-black hover:bg-black active:bg-black text-white"
-          onClick={ () => handleSignIn('github') }
+          onClick={ async () => handleSignIn('github') }
         >
           Acessar com GitHub
         </Button>

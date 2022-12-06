@@ -1,8 +1,10 @@
 import { PayloadAction } from '@reduxjs/toolkit'
+import { User } from 'firebase/auth'
 
 export interface State {
   authenticated: boolean
-  accessToken?: string
+  user?: User
+  provider?: string
 }
 
 export type LoginPayload = PayloadAction<{
@@ -10,6 +12,10 @@ export type LoginPayload = PayloadAction<{
   password: string
 }>
 
+export type LoginPopupPayload = PayloadAction<{
+  providerId: string
+}>
+
 export type LoginSuccessPayload = PayloadAction<{
-  accessToken: string
+  user: User
 }>
