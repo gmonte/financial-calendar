@@ -22,8 +22,8 @@ jobs:
         with:
           node-version: 16
 
-      - name: Install dependencies
-        run: yarn --frozen-lockfile
+      # - name: Install dependencies
+      #   run: yarn --frozen-lockfile
 
       - name: Make .env file
         uses: SpicyPizza/create-envfile@v1.3
@@ -40,17 +40,17 @@ jobs:
           fail_on_empty: false
 
       - name: Testing
-        run: cd packages/web && ls && cat .env
+        run: cd packages/web && ls -la && cat .env
 
-      - name: Build App
-        run: cd packages/web && yarn build
+      # - name: Build App
+      #   run: cd packages/web && yarn build
       
-      - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FINANCIAL_CALENDAR_2805 }}'
-          channelId: live
-          projectId: financial-calendar-2805
-          entryPoint: ./packages/web
-          target: app
+      # - name: Deploy to Firebase Hosting
+      #   uses: FirebaseExtended/action-hosting-deploy@v0
+      #   with:
+      #     repoToken: '${{ secrets.GITHUB_TOKEN }}'
+      #     firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FINANCIAL_CALENDAR_2805 }}'
+      #     channelId: live
+      #     projectId: financial-calendar-2805
+      #     entryPoint: ./packages/web
+      #     target: app
