@@ -6,10 +6,11 @@
     "financial-calendar-gmonte": {
       "hosting": {
         "storybook": [
-          "storybook.financialcalendar"
+          "storybook-financial-calendar"
         ],
         "app": [
-          "financialcalendar"
+          "financial-calendar-gmonte",
+          "financial-calendar"
         ]
       }
     }
