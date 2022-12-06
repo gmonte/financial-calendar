@@ -39,6 +39,9 @@ jobs:
           file_name: .env
           fail_on_empty: false
 
+      - name: Testing
+        run: cd packages/web && ls && cat .env
+
       - name: Build App
         run: cd packages/web && yarn build
       
