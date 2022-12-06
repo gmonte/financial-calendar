@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "financial-calendar-gmonte",
+    "default": "financial-calendar-gmonte"
   },
   "targets": {
     "financial-calendar-gmonte": {

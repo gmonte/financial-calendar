@@ -24,11 +24,8 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: Go to web package
-        run: cd packages/web
-
       - name: Build App
-        run: yarn build
+        run: cd packages/web && yarn build
       
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
@@ -37,4 +34,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FINANCIAL_CALENDAR_GMONTE }}'
           channelId: live
           projectId: financial-calendar-gmonte
+          entryPoint: ./packages/web
           target: app
