@@ -11,8 +11,7 @@ import {
 import { Loader } from '~/components/Loader'
 import { GuestLayout } from '~/layouts/GuestLayout'
 
-const SignIn = lazy(async () => await import('~/modules/auth/pages/SignIn'))
-const SignUp = lazy(async () => await import('~/modules/auth/pages/SignUp'))
+const SignIn = lazy(async () => await import('~/pages/auth/SignIn'))
 
 export function GuestRoutes () {
   return (
@@ -27,11 +26,6 @@ export function GuestRoutes () {
           </Suspense>
         ) } />
 
-        <Route path="/auth/sign-up" element={ (
-          <Suspense fallback={ <Loader /> }>
-            <SignUp />
-          </Suspense>
-        ) } />
       </Route>
 
       <Route path="*" element={ <Navigate to="/auth" replace /> } />

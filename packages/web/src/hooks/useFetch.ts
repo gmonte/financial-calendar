@@ -13,7 +13,7 @@ import useSWR, {
   Key
 } from 'swr'
 
-export function useFetch<Data = any, Error = any> (
+export function useFetch<Data = unknown, Error = unknown> (
   axiosInstance: AxiosInstance,
   url: Key = '',
   swrConfiguration?: SWRConfiguration<Data, Error>

@@ -11,7 +11,7 @@ import {
 import { Loader } from '~/components/Loader'
 import { AuthenticatedLayout } from '~/layouts/AuthenticatedLayout'
 
-const Home = lazy(async () => await import('~/modules/home/pages/Home'))
+const Home = lazy(async () => await import('~/pages/home/Home'))
 
 export function AuthenticatedRoutes () {
   return (

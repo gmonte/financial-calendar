@@ -3,7 +3,10 @@ import {
   GithubAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
-  signOut
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  sendEmailVerification
 } from 'firebase/auth'
 import { takeLatest } from 'redux-saga/effects'
 import {
@@ -15,24 +18,63 @@ import { app } from '~/services/firebase'
 
 import { AuthActions } from '.'
 import { LoaderActions } from '../loader'
-import { LoginPopupPayload } from './types'
+import {
+  CreateAccountPayload,
+  LoginPayload,
+  LoginPopupPayload
+} from './types'
 
-// function* login ({ payload }: LoginPayload) {
-//   try {
-//     yield put(LoaderActions.start())
+function* createAccount ({
+  payload: {
+    email,
+    password,
+    onSuccess = () => {},
+    onError = () => {}
+  }
+}: CreateAccountPayload) {
+  try {
+    yield put(LoaderActions.start())
 
-//     const { data } = yield * call(authenticationService.login, {
-//       username: payload.username,
-//       password: md5(payload.password)
-//     })
+    const auth = getAuth(app)
+    const { user } = yield * call(createUserWithEmailAndPassword, auth, email, password)
 
-//     yield put(AuthActions.loginSuccess({ accessToken: `Bearer ${ data.accessToken }` }))
-//   } catch (err) {
-//     console.error(err)
-//   } finally {
-//     yield put(LoaderActions.stop())
-//   }
-// }
+    yield * call(sendEmailVerification, user)
+
+    yield * call(onSuccess)
+  } catch (err) {
+    console.error(err)
+    yield * call(onError)
+  } finally {
+    yield put(LoaderActions.stop())
+  }
+}
+
+function* login ({
+  payload: {
+    email,
+    password,
+    onError = () => {}
+  }
+}: LoginPayload) {
+  try {
+    yield put(LoaderActions.start())
+
+    const auth = getAuth(app)
+    const { user } = yield * call(signInWithEmailAndPassword, auth, email, password)
+
+    if (!user?.emailVerified) {
+      yield * call(sendEmailVerification, user)
+      yield * call(onError, 'Você precisa verificar seu e-mail antes de fazer login. Enviamos um novo email de verificação para você.')
+    } else {
+      yield put(AuthActions.loginSuccess({ user }))
+    }
+  } catch (err) {
+    console.error(err)
+    yield * call(onError, 'Usuário/senha incorretos')
+  } finally {
+    yield put(LoaderActions.stop())
+  }
+}
 
 function* loginPopup ({ payload: { providerId } }: LoginPopupPayload) {
   try {
@@ -73,6 +115,8 @@ function* logout () {
 }
 
 export default [
+  takeLatest(AuthActions.createAccount.type, createAccount),
+  takeLatest(AuthActions.login.type, login),
   takeLatest(AuthActions.loginPopup.type, loginPopup),
   takeLatest(AuthActions.logout.type, logout)
 ]

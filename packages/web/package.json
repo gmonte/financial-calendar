@@ -12,7 +12,9 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.4",
     "@radix-ui/react-checkbox": "^1.0.1",
+    "@radix-ui/react-dialog": "^1.0.2",
     "@radix-ui/react-slot": "^1.0.1",
     "@reduxjs/toolkit": "^1.8.5",
     "axios": "^0.26.1",

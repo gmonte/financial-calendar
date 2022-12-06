@@ -7,9 +7,17 @@ export interface State {
   provider?: string
 }
 
-export type LoginPayload = PayloadAction<{
-  username: string
+export type CreateAccountPayload = PayloadAction<{
+  email: string
   password: string
+  onSuccess?: () => void
+  onError?: () => void
+}>
+
+export type LoginPayload = PayloadAction<{
+  email: string
+  password: string
+  onError?: (message?: string) => void
 }>
 
 export type LoginPopupPayload = PayloadAction<{

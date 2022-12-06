@@ -27,8 +27,8 @@ export function Button ({
     <Comp
       { ...rest }
       className={ clsx(
-        'py-4',
-        'px-3',
+        'py-2',
+        'px-4',
         'rounded',
         'font-sans',
         'font-semibold',
