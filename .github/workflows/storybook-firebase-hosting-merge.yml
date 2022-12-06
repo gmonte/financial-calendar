@@ -9,6 +9,8 @@ name: Deploy Storybook to Firebase Hosting on merge
     paths:
       - packages/web/components/**
       - packages/web/.storybook/**
+      - packages/web/.firebaserc
+      - packages/web/firebase.json
 
 jobs:
   storybook_build_and_deploy:
