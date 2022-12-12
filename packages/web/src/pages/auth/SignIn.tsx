@@ -1,65 +1,63 @@
+import { useCallback } from 'react'
 import {
-  FormEventHandler,
-  useCallback,
-  useRef,
-  useState
-} from 'react'
+  Controller,
+  useForm
+} from 'react-hook-form'
 
+import { yupResolver } from '@hookform/resolvers/yup'
+import flow from 'lodash/fp/flow'
 import {
-  Eye,
-  EyeClosed,
   GithubLogo,
   GoogleLogo
 } from 'phosphor-react'
+import * as yup from 'yup'
 
+import { SignInData } from '~/@types/Auth'
 import { Alert } from '~/components/Alert'
 import { Button } from '~/components/Button'
-import {
-  Checkbox,
-  CheckedState
-} from '~/components/Checkbox'
+import { Checkbox } from '~/components/Checkbox'
 import { Divider } from '~/components/Divider'
+import { Form } from '~/components/Form'
 import { Heading } from '~/components/Heading'
 import { Text } from '~/components/Text'
 import { TextInput } from '~/components/TextInput'
 import { useModal } from '~/hooks/useModal'
 import { useAppDispatch } from '~/store'
 import { AuthActions } from '~/store/auth'
+import { email } from '~/utils/validators/email.validator'
+import { required } from '~/utils/validators/required.validator'
 
 import { CreateAccountModal } from './CreateAccountModal'
+
+const schema = yup.object().shape<Record<keyof SignInData, yup.AnySchema>>({
+  email: flow(
+    email(),
+    required()
+  )(yup.string()),
+  password: required()(yup.string()),
+  rememberMe: yup.boolean()
+})
 
 export default function SignIn () {
   const dispatch = useAppDispatch()
 
   const { createModal } = useModal()
 
-  const emailRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
+  const {
+    handleSubmit,
+    register,
+    control,
+    formState: { errors }
+  } = useForm<SignInData>({
+    resolver: yupResolver(schema),
+    defaultValues: { rememberMe: false }
+  })
 
-  const [showPass, setShowPass] = useState(false)
-  const [rememberMe, setRememberMe] = useState<CheckedState>(false)
-
-  const handleLogin = useCallback<FormEventHandler<HTMLFormElement>>(
-    (event) => {
-      event.preventDefault()
-      if (!emailRef.current?.value) {
-        return createModal({
-          id: 'login-modal-error',
-          Component: Alert,
-          props: { title: 'Email é obrigatório!' }
-        })
-      }
-      if (!passwordRef.current?.value) {
-        return createModal({
-          id: 'login-modal-error',
-          Component: Alert,
-          props: { title: 'Senha é obrigatório!' }
-        })
-      }
-
+  const handleLogin = useCallback(
+    (data: SignInData) => {
+      console.log('data', data)
       dispatch(AuthActions.login({
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
+        data,
         onError (message) {
           return createModal({
             id: 'login-modal-error',
@@ -101,25 +99,22 @@ export default function SignIn () {
       </header>
 
       <div className="flex items-center justify-center flex-col">
-        <form
-          className="mt-6 flex flex-col gap-3"
-          onSubmit={ handleLogin }
+        <Form
+          className="mt-6"
+          onSubmit={ handleSubmit(handleLogin) }
         >
-          <TextInput.Root className="w-full">
-            <TextInput.Input ref={ emailRef } placeholder="Informe seu e-mail" />
+          <TextInput.Root className="w-full" error={ errors.email?.message }>
+            <TextInput.Input
+              placeholder="Informe seu e-mail"
+              { ...register('email') }
+            />
           </TextInput.Root>
 
-          <TextInput.Root className="w-full">
-            <TextInput.Input
-              ref={ passwordRef }
-              type={ showPass ? 'text' : 'password' }
+          <TextInput.Root className="w-full" error={ errors.password?.message }>
+            <TextInput.InputPassword
               placeholder="Informe sua senha"
+              { ...register('password') }
             />
-            <TextInput.Icon>
-              <button type="button" onClick={ () => setShowPass(old => !old) }>
-                {showPass ? <Eye fontSize={ 24 } /> : <EyeClosed fontSize={ 24 } />}
-              </button>
-            </TextInput.Icon>
           </TextInput.Root>
 
           <Text size="sm" asChild className="hover:underline text-right">
@@ -128,17 +123,30 @@ export default function SignIn () {
             </a>
           </Text>
 
-          <Checkbox
-            label="Lembrar de mim"
-            className="mb-2"
-            checked={ rememberMe }
-            onChange={ setRememberMe }
+          <Controller
+            name="rememberMe"
+            control={ control }
+            render={ ({
+              field: {
+                value,
+                ...field
+              }
+            }) => {
+              return (
+                <Checkbox
+                  label="Lembrar de mim"
+                  className="mb-2"
+                  checked={ value }
+                  { ...field }
+                />
+              )
+            } }
           />
 
           <Button>
             Acessar
           </Button>
-        </form>
+        </Form>
 
         <Text asChild className="mt-4 hover:underline">
           <button onClick={ handleCreateAccount }>

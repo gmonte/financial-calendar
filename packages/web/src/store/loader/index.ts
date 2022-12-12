@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { State } from './types'
+import { State } from '~/@types/Loader'
 
 const initialState: State = {
   loadingCounter: 0,

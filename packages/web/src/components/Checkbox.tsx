@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import clsx from 'clsx'
@@ -15,20 +15,19 @@ export interface CheckboxProps {
   className?: string
 }
 
-export function Checkbox ({
-  label,
-  className,
-  onChange,
-  ...rest
-}: CheckboxProps) {
-  const checkboxRef = useRef<HTMLButtonElement>({} as HTMLButtonElement)
-  return (
+export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
+  ({
+    label,
+    className,
+    onChange,
+    checked
+  }, ref) => (
     <div className={ clsx('flex items-center gap-3', className) }>
       <CheckboxPrimitive.Root
-        ref={ checkboxRef }
+        ref={ ref }
         className="h-6 w-6 p-[2px] bg-gray-800  border-cyan-500 border-solid border rounded flex"
         onCheckedChange={ onChange }
-        { ...rest }
+        checked={ checked }
       >
         <CheckboxPrimitive.Indicator asChild>
           <Check weight="bold" className="h-5 w-5 text-cyan-500" />
@@ -36,7 +35,7 @@ export function Checkbox ({
       </CheckboxPrimitive.Root>
 
       {label && (
-        <div className="cursor-pointer" onClick={ () => checkboxRef.current.click() } >
+        <div className="cursor-pointer" onClick={ () => onChange?.(!checked) } >
           <Text className="font-semibold">
             {label}
           </Text>
@@ -44,4 +43,6 @@ export function Checkbox ({
       )}
     </div>
   )
-}
+)
+
+Checkbox.displayName = 'Checkbox'

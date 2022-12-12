@@ -6,7 +6,7 @@ import {
   LoginPayload,
   LoginPopupPayload,
   LoginSuccessPayload
-} from './types'
+} from '~/@types/Auth'
 
 const initialState: State = {
   authenticated: false,

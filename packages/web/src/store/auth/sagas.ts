@@ -14,26 +14,27 @@ import {
   put
 } from 'typed-redux-saga'
 
-import { app } from '~/services/firebase'
-
-import { AuthActions } from '.'
-import { LoaderActions } from '../loader'
 import {
   CreateAccountPayload,
   LoginPayload,
   LoginPopupPayload
-} from './types'
+} from '~/@types/Auth'
+import { app } from '~/services/firebase'
+
+import { AuthActions } from '.'
+import { LoaderActions } from '../loader'
 
 function* createAccount ({
   payload: {
-    email,
-    password,
+    data,
     onSuccess = () => {},
     onError = () => {}
   }
 }: CreateAccountPayload) {
   try {
     yield put(LoaderActions.start())
+
+    const { email, password } = data
 
     const auth = getAuth(app)
     const { user } = yield * call(createUserWithEmailAndPassword, auth, email, password)
@@ -49,15 +50,11 @@ function* createAccount ({
   }
 }
 
-function* login ({
-  payload: {
-    email,
-    password,
-    onError = () => {}
-  }
-}: LoginPayload) {
+function* login ({ payload: { data, onError = () => {} } }: LoginPayload) {
   try {
     yield put(LoaderActions.start())
+
+    const { email, password } = data
 
     const auth = getAuth(app)
     const { user } = yield * call(signInWithEmailAndPassword, auth, email, password)
