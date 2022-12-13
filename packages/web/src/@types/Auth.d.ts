@@ -13,11 +13,21 @@ export type CreateAccountData = {
   confirmPassword: string
 }
 
+export type ForgotPasswordData = {
+  email: string
+}
+
 export interface State {
   authenticated: boolean
   user?: User
   provider?: string
 }
+
+export type ForgotPasswordPayload = PayloadAction<{
+  data: ForgotPasswordData,
+  onSuccess?: () => void
+  onError?: (message?: string) => void
+}>
 
 export type CreateAccountPayload = PayloadAction<{
   data: CreateAccountData,

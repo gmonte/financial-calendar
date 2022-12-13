@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signOut,
   sendEmailVerification
 } from 'firebase/auth'
@@ -17,6 +18,7 @@ import {
 
 import {
   CreateAccountPayload,
+  ForgotPasswordPayload,
   LoginPayload,
   LoginPopupPayload
 } from '~/@types/Auth'
@@ -24,6 +26,36 @@ import { app } from '~/services/firebase'
 
 import { AuthActions } from '.'
 import { LoaderActions } from '../loader'
+
+function* forgotPassword ({
+  payload: {
+    data,
+    onSuccess = () => { },
+    onError = () => { }
+  }
+}: ForgotPasswordPayload) {
+  try {
+    yield put(LoaderActions.start())
+
+    const { email } = data
+
+    const auth = getAuth(app)
+    yield * call(sendPasswordResetEmail, auth, email)
+
+    yield * call(onSuccess)
+  } catch (err) {
+    console.error(err)
+    let message = 'Tente novamente mais tarde'
+    if (err instanceof FirebaseError) {
+      if (err.code === 'auth/user-not-found') {
+        message = 'Usuário não encontrado'
+      }
+    }
+    yield * call(onError, message)
+  } finally {
+    yield put(LoaderActions.stop())
+  }
+}
 
 function* createAccount ({
   payload: {
@@ -44,7 +76,7 @@ function* createAccount ({
 
     yield * call(onSuccess)
   } catch (err) {
-    let message = 'Tente novamente'
+    let message = 'Tente novamente mais tarde'
     if (err instanceof FirebaseError) {
       if (err.code === 'auth/email-already-in-use') {
         message = 'Endereço de e-mail já cadastrado. Tente fazer login ou recuperar sua senha.'
@@ -72,7 +104,7 @@ function* login ({ payload: { data, onError = () => {} } }: LoginPayload) {
       yield put(AuthActions.loginSuccess({ user }))
     }
   } catch (err) {
-    let message = 'Tente novamente'
+    let message = 'Tente novamente mais tarde'
     if (err instanceof FirebaseError) {
       if (err.code === 'auth/wrong-password') {
         message = 'Senha incorreta. Tente novamente.'
@@ -113,7 +145,7 @@ function* loginPopup ({ payload: { providerId, onError = () => { } } }: LoginPop
       }
     }
   } catch (err) {
-    let message = 'Tente novamente'
+    let message = 'Tente novamente mais tarde'
     if (err instanceof FirebaseError) {
       if (err.code === 'auth/account-exists-with-different-credential') {
         message = `Conta existente, porém não está vinculada ao ${ providerId }. Por favor escolha outra forma de login.`
@@ -131,6 +163,7 @@ function* logout () {
 }
 
 export default [
+  takeLatest(AuthActions.forgotPassword.type, forgotPassword),
   takeLatest(AuthActions.createAccount.type, createAccount),
   takeLatest(AuthActions.login.type, login),
   takeLatest(AuthActions.loginPopup.type, loginPopup),

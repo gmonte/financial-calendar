@@ -5,7 +5,8 @@ import {
   CreateAccountPayload,
   LoginPayload,
   LoginPopupPayload,
-  LoginSuccessPayload
+  LoginSuccessPayload,
+  ForgotPasswordPayload
 } from '~/@types/Auth'
 
 const initialState: State = {
@@ -18,6 +19,7 @@ export const slice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    forgotPassword (_state, _action: ForgotPasswordPayload) {},
     createAccount (_state, _action: CreateAccountPayload) {},
     login (_state, _action: LoginPayload) {},
     loginPopup (_state, _action: LoginPopupPayload) {},

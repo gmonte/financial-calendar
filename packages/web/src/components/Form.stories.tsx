@@ -4,17 +4,13 @@ import {
 } from '@storybook/react'
 
 import {
-  Alert,
-  AlertProps
-} from './Alert'
+  Form,
+  FormProps
+} from './Form'
 
 export default {
-  title: 'Components/Alert',
-  component: Alert,
-  args: {
-    title: 'Attention!',
-    description: 'This is an alert!'
-  }
-} as Meta<AlertProps>
+  title: 'Components/Form',
+  component: Form
+} as Meta<FormProps>
 
-export const Default: StoryObj<AlertProps> = {}
+export const Default: StoryObj<FormProps> = {}

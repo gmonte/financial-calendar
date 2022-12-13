@@ -28,6 +28,7 @@ import { email } from '~/utils/validators/email.validator'
 import { required } from '~/utils/validators/required.validator'
 
 import { CreateAccountModal } from './CreateAccountModal'
+import { ForgotPasswordModal } from './ForgotPasswordModal'
 
 const schema = yup.object().shape<Record<keyof SignInData, yup.AnySchema>>({
   email: flow(
@@ -87,6 +88,14 @@ export default function SignIn () {
     [dispatch]
   )
 
+  const handleForgotPassword = useCallback(
+    () => createModal({
+      id: 'forgot-password-modal',
+      Component: ForgotPasswordModal
+    }),
+    [createModal]
+  )
+
   const handleCreateAccount = useCallback(
     () => createModal({
       id: 'create-account-modal',
@@ -128,9 +137,9 @@ export default function SignIn () {
           </TextInput.Root>
 
           <Text size="sm" asChild className="hover:underline text-right">
-            <a href="https://google.com" target="_blank" rel="noreferrer">
+            <button type="button" onClick={ handleForgotPassword }>
               Esqueci minha senha
-            </a>
+            </button>
           </Text>
 
           <Controller
