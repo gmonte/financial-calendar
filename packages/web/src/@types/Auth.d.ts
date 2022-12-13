@@ -1,19 +1,18 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { User } from 'firebase/auth'
 
-export type SignInData = {
+export interface SignInData {
   email: string
   password: string
-  rememberMe: boolean
 }
 
-export type CreateAccountData = {
+export interface CreateAccountData {
   email: string
   password: string
   confirmPassword: string
 }
 
-export type ForgotPasswordData = {
+export interface ForgotPasswordData {
   email: string
 }
 
@@ -24,19 +23,19 @@ export interface State {
 }
 
 export type ForgotPasswordPayload = PayloadAction<{
-  data: ForgotPasswordData,
+  data: ForgotPasswordData
   onSuccess?: () => void
   onError?: (message?: string) => void
 }>
 
 export type CreateAccountPayload = PayloadAction<{
-  data: CreateAccountData,
+  data: CreateAccountData
   onSuccess?: () => void
   onError?: (message?: string) => void
 }>
 
 export type LoginPayload = PayloadAction<{
-  data: SignInData,
+  data: SignInData
   onError?: (message?: string) => void
 }>
 

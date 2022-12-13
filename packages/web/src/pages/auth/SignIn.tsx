@@ -1,8 +1,5 @@
 import { useCallback } from 'react'
-import {
-  Controller,
-  useForm
-} from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import flow from 'lodash/fp/flow'
@@ -14,7 +11,6 @@ import * as yup from 'yup'
 
 import { SignInData } from '~/@types/Auth'
 import { Button } from '~/components/Button'
-import { Checkbox } from '~/components/Checkbox'
 import { Divider } from '~/components/Divider'
 import { Form } from '~/components/Form'
 import { Heading } from '~/components/Heading'
@@ -35,8 +31,7 @@ const schema = yup.object().shape<Record<keyof SignInData, yup.AnySchema>>({
     email(),
     required()
   )(yup.string()),
-  password: required()(yup.string()),
-  rememberMe: yup.boolean()
+  password: required()(yup.string())
 })
 
 export default function SignIn () {
@@ -48,12 +43,8 @@ export default function SignIn () {
   const {
     handleSubmit,
     register,
-    control,
     formState: { errors }
-  } = useForm<SignInData>({
-    resolver: yupResolver(schema),
-    defaultValues: { rememberMe: false }
-  })
+  } = useForm<SignInData>({ resolver: yupResolver(schema) })
 
   const handleLogin = useCallback(
     (data: SignInData) => {
@@ -85,7 +76,7 @@ export default function SignIn () {
         }
       }))
     },
-    [dispatch]
+    [createToast, dispatch]
   )
 
   const handleForgotPassword = useCallback(
@@ -142,27 +133,7 @@ export default function SignIn () {
             </button>
           </Text>
 
-          <Controller
-            name="rememberMe"
-            control={ control }
-            render={ ({
-              field: {
-                value,
-                ...field
-              }
-            }) => {
-              return (
-                <Checkbox
-                  label="Lembrar de mim"
-                  className="mb-2"
-                  checked={ value }
-                  { ...field }
-                />
-              )
-            } }
-          />
-
-          <Button>
+          <Button className="mt-2">
             Acessar
           </Button>
         </Form>

@@ -12,8 +12,6 @@ import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/es/integration/react'
 import createSagaMiddleware from 'redux-saga'
 
-// import { api } from '~/services/api'
-
 import reducers from './reducers'
 import sagas from './sagas'
 
@@ -36,20 +34,6 @@ export const store = configureStore({
 })
 
 sagaMiddleware.run(sagas)
-
-/*
-  Add header Authorization when store contains accessToken
-  or remove when it not contains accessToken
-*/
-// store.subscribe(() => {
-//   const { accessToken } = store.getState().auth
-
-//   if (accessToken !== undefined) {
-//     api.defaults.headers.common.Authorization = accessToken
-//   } else {
-//     delete api.defaults.headers.common.Authorization
-//   }
-// })
 
 const persistor = persistStore(store)
 
