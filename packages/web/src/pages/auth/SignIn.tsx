@@ -13,7 +13,6 @@ import {
 import * as yup from 'yup'
 
 import { SignInData } from '~/@types/Auth'
-import { Alert } from '~/components/Alert'
 import { Button } from '~/components/Button'
 import { Checkbox } from '~/components/Checkbox'
 import { Divider } from '~/components/Divider'
@@ -22,6 +21,7 @@ import { Heading } from '~/components/Heading'
 import { Text } from '~/components/Text'
 import { TextInput } from '~/components/TextInput'
 import { useModal } from '~/hooks/useModal'
+import { useToast } from '~/hooks/useToast'
 import { useAppDispatch } from '~/store'
 import { AuthActions } from '~/store/auth'
 import { email } from '~/utils/validators/email.validator'
@@ -42,6 +42,7 @@ export default function SignIn () {
   const dispatch = useAppDispatch()
 
   const { createModal } = useModal()
+  const { createToast } = useToast()
 
   const {
     handleSubmit,
@@ -59,20 +60,29 @@ export default function SignIn () {
       dispatch(AuthActions.login({
         data,
         onError (message) {
-          return createModal({
-            id: 'login-modal-error',
-            Component: Alert,
-            props: { title: message ?? 'Não foi possível conectar à sua conta. Tente novamente.' }
+          createToast({
+            type: 'error',
+            title: 'Ocorreu um erro ao efetuar o login',
+            description: message
           })
         }
       }))
     },
-    [createModal, dispatch]
+    [createToast, dispatch]
   )
 
   const handleSignIn = useCallback(
     (providerId: string) => {
-      dispatch(AuthActions.loginPopup({ providerId }))
+      dispatch(AuthActions.loginPopup({
+        providerId,
+        onError (message) {
+          createToast({
+            type: 'error',
+            title: 'Ocorreu um erro ao efetuar o login',
+            description: message
+          })
+        }
+      }))
     },
     [dispatch]
   )

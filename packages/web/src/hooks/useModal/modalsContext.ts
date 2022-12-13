@@ -3,8 +3,8 @@ import {
   useContext
 } from 'react'
 
-import { IUseModal } from './types'
+import { UseModal } from './types'
 
-export const ModalsContext = createContext<IUseModal>({} as IUseModal)
+export const ModalsContext = createContext<UseModal>({} as UseModal)
 
-export const useModal = (): IUseModal => useContext<IUseModal>(ModalsContext)
+export const useModal = (): UseModal => useContext<UseModal>(ModalsContext)

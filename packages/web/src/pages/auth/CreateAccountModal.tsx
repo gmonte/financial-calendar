@@ -6,17 +6,15 @@ import flow from 'lodash/fp/flow'
 import * as yup from 'yup'
 
 import { CreateAccountData } from '~/@types/Auth'
-import { Alert } from '~/components/Alert'
 import { Button } from '~/components/Button'
 import { Form } from '~/components/Form'
 import { Modal } from '~/components/Modal'
 import { TextInput } from '~/components/TextInput'
-import {
-  ModalProps,
-  useModal
-} from '~/hooks/useModal'
+import { ModalProps } from '~/hooks/useModal'
+import { useToast } from '~/hooks/useToast'
 import { useAppDispatch } from '~/store'
 import { AuthActions } from '~/store/auth'
+import { LoaderActions } from '~/store/loader'
 import { email } from '~/utils/validators/email.validator'
 import { equalTo } from '~/utils/validators/equalTo.validator'
 import { password } from '~/utils/validators/password.validator'
@@ -33,7 +31,7 @@ const schema = yup.object().shape<Record<keyof CreateAccountData, yup.AnySchema>
 
 export function CreateAccountModal ({ open, close }: ModalProps) {
   const dispatch = useAppDispatch()
-  const { createModal } = useModal()
+  const { createToast } = useToast()
 
   const {
     handleSubmit,
@@ -43,54 +41,26 @@ export function CreateAccountModal ({ open, close }: ModalProps) {
 
   const handleCreateUser = useCallback(
     (data: CreateAccountData) => {
-      // if (!emailRef.current?.value) {
-      //   return createModal({
-      //     id: 'create-account-modal-error',
-      //     Component: Alert,
-      //     props: { title: 'Email é obrigatório!' }
-      //   })
-      // }
-      // if (!passwordRef.current?.value) {
-      //   return createModal({
-      //     id: 'create-account-modal-error',
-      //     Component: Alert,
-      //     props: { title: 'Senha é obrigatório!' }
-      //   })
-      // }
-      // if (passwordRef.current?.value !== passwordConfirmationRef.current?.value) {
-      //   return createModal({
-      //     id: 'create-account-modal-error',
-      //     Component: Alert,
-      //     props: { title: 'As senhas não são iguais!' }
-      //   })
-      // }
-
       dispatch(AuthActions.createAccount({
         data,
         onSuccess () {
-          createModal({
-            id: 'create-account-modal-success',
-            Component: Alert,
-            props: {
-              title: 'Tudo certo!',
-              description: 'Enviamos um email de confirmação',
-              onConfirm: close
-            }
+          createToast({
+            type: 'success',
+            title: 'Tudo certo!',
+            description: 'Enviamos um email de confirmação. Por favor confira sua caixa de entrada.'
           })
+          close()
         },
-        onError () {
-          createModal({
-            id: 'create-account-modal-error',
-            Component: Alert,
-            props: {
-              title: 'Oops!',
-              description: 'Não foi possível criar a sua conta. Tente novamente.'
-            }
+        onError (message) {
+          createToast({
+            type: 'error',
+            title: 'Não foi possível criar a sua conta',
+            description: message
           })
         }
       }))
     },
-    [close, createModal, dispatch]
+    [close, createToast, dispatch]
   )
 
   return (
@@ -131,6 +101,12 @@ export function CreateAccountModal ({ open, close }: ModalProps) {
         <Modal.Footer>
           <Button>
             Criar Conta
+          </Button>
+        </Modal.Footer>
+
+        <Modal.Footer>
+          <Button type="button" onClick={ () => dispatch(LoaderActions.start()) }>
+            Loader
           </Button>
         </Modal.Footer>
       </Form>

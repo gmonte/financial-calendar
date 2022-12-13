@@ -1,3 +1,4 @@
+import { FirebaseError } from 'firebase/app'
 import {
   getAuth,
   GithubAuthProvider,
@@ -43,8 +44,13 @@ function* createAccount ({
 
     yield * call(onSuccess)
   } catch (err) {
-    console.error(err)
-    yield * call(onError)
+    let message = 'Tente novamente'
+    if (err instanceof FirebaseError) {
+      if (err.code === 'auth/email-already-in-use') {
+        message = 'Endereço de e-mail já cadastrado. Tente fazer login ou recuperar sua senha.'
+      }
+    }
+    yield * call(onError, message)
   } finally {
     yield put(LoaderActions.stop())
   }
@@ -66,14 +72,21 @@ function* login ({ payload: { data, onError = () => {} } }: LoginPayload) {
       yield put(AuthActions.loginSuccess({ user }))
     }
   } catch (err) {
-    console.error(err)
-    yield * call(onError, 'Usuário/senha incorretos')
+    let message = 'Tente novamente'
+    if (err instanceof FirebaseError) {
+      if (err.code === 'auth/wrong-password') {
+        message = 'Senha incorreta. Tente novamente.'
+      } else if (err.code === 'auth/user-not-found') {
+        message = 'Usuário não encontrado'
+      }
+    }
+    yield * call(onError, message)
   } finally {
     yield put(LoaderActions.stop())
   }
 }
 
-function* loginPopup ({ payload: { providerId } }: LoginPopupPayload) {
+function* loginPopup ({ payload: { providerId, onError = () => { } } }: LoginPopupPayload) {
   try {
     yield put(LoaderActions.start())
 
@@ -100,7 +113,13 @@ function* loginPopup ({ payload: { providerId } }: LoginPopupPayload) {
       }
     }
   } catch (err) {
-    console.error(err)
+    let message = 'Tente novamente'
+    if (err instanceof FirebaseError) {
+      if (err.code === 'auth/account-exists-with-different-credential') {
+        message = `Conta existente, porém não está vinculada ao ${ providerId }. Por favor escolha outra forma de login.`
+      }
+    }
+    yield * call(onError, message)
   } finally {
     yield put(LoaderActions.stop())
   }

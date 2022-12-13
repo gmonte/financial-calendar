@@ -1,23 +1,13 @@
-export interface LoaderProps {
-  size?: 'sm' | 'md'
-}
+import { CircleNotch } from 'phosphor-react'
 
 export function Loader () {
   return (
-    <div
-      style={ {
-        top: 0,
-        left: 0,
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      } }
-    >
-      <span>Loading...</span>
+    <div className="absolute top-0 left-0 w-full h-full bg-gray-900 bg-opacity-60 flex items-center justify-center z-[60]">
+      <CircleNotch
+        weight="bold"
+        className="animate-spin text-cyan-800"
+        size={ 40 }
+      />
     </div>
   )
 }

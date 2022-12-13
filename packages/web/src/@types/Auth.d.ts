@@ -22,7 +22,7 @@ export interface State {
 export type CreateAccountPayload = PayloadAction<{
   data: CreateAccountData,
   onSuccess?: () => void
-  onError?: () => void
+  onError?: (message?: string) => void
 }>
 
 export type LoginPayload = PayloadAction<{
@@ -32,6 +32,7 @@ export type LoginPayload = PayloadAction<{
 
 export type LoginPopupPayload = PayloadAction<{
   providerId: string
+  onError?: (message?: string) => void
 }>
 
 export type LoginSuccessPayload = PayloadAction<{
