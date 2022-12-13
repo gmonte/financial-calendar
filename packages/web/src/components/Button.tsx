@@ -21,10 +21,10 @@ export function Button ({
   children,
   ...rest
 }: ButtonProps) {
-  const Comp = asChild ? Slot : 'button'
+  const Comp = asChild ? Slot : 'div'
 
   return (
-    <Comp
+    <button
       { ...rest }
       className={ clsx(
         'py-2',
@@ -50,14 +50,14 @@ export function Button ({
           {startIcon}
         </div>
       )}
-      <div className="flex-1 text-center">
+      <Comp className="flex-1 text-center">
         {children}
-      </div>
+      </Comp>
       {endIcon && (
-        <div className="pr-2">
+        <div className="px-2">
           {endIcon}
         </div>
       )}
-    </Comp>
+    </button>
   )
 }
