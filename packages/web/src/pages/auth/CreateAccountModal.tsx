@@ -14,7 +14,6 @@ import { ModalProps } from '~/hooks/useModal'
 import { useToast } from '~/hooks/useToast'
 import { useAppDispatch } from '~/store'
 import { AuthActions } from '~/store/auth'
-import { LoaderActions } from '~/store/loader'
 import { email } from '~/utils/validators/email.validator'
 import { equalTo } from '~/utils/validators/equalTo.validator'
 import { password } from '~/utils/validators/password.validator'
@@ -101,12 +100,6 @@ export function CreateAccountModal ({ open, close }: ModalProps) {
         <Modal.Footer>
           <Button>
             Criar Conta
-          </Button>
-        </Modal.Footer>
-
-        <Modal.Footer>
-          <Button type="button" onClick={ () => dispatch(LoaderActions.start()) }>
-            Loader
           </Button>
         </Modal.Footer>
       </Form>
